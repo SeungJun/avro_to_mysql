@@ -1,7 +1,6 @@
 package com.kafka.producer;
 
-import com.kafka.MyRecord;
-import com.kafka.MyTest;
+import com.kafka.Dataset;
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -18,25 +17,23 @@ public class ProducerAsync {
 
     public static void main(String[] args) {
         Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092"); //브로커 리스트를 정의합니다.
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
         props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
         props.put(ProducerConfig.ACKS_CONFIG, "all");
         props.put(ProducerConfig.RETRIES_CONFIG, 0);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
 
-        Producer<String, MyRecord> producer = new KafkaProducer<>(props);
+//        Producer<String, MyRecord> producer = new KafkaProducer<>(props);
+        Producer<String, Dataset> producer = new KafkaProducer<>(props);
         try {
 
             for (int i = 0; i < 4; i++) {
 //                ProducerRecord<String, String> record = new ProducerRecord<>("testTopic", "test - " + i);
                 final String orderId = "id" + Long.toString(i);
-//                MyTest myTest = new MyTest(orderId, MyRecord.newBuilder().build()) ;
-                MyRecord myRecord = new MyRecord(orderId, orderId, orderId, orderId);
-                MyTest myTest = new MyTest(orderId, new MyRecord()) ;
-                ProducerRecord<String, MyRecord> record = new ProducerRecord<>(TOPIC, orderId ,myRecord);
-                //ProducerRecord 오브젝트를 생성합니다.
-                producer.send(record, new ProducerCallback(record)); //프로듀서에서 레코드를 보낼 때 콜백 오브젝트를 같이 보냅니다.
+                Dataset dataset = new Dataset(orderId , 1L, orderId, 100.00d );
+                ProducerRecord<String, Dataset> record = new ProducerRecord<>(TOPIC, orderId , dataset);
+                producer.send(record, new ProducerCallback(record));
 
                 System.out.printf("Successfully produced 10 messages to a topic called %s%n", TOPIC);
             }

@@ -1,42 +1,11 @@
 {
-  "name": "TestSchema",
-  "type": "array",
-  "namespace": "com.kafka",
-  "items": {
-    "namespace": "com.kafka",
-    "name": "MyTest",
-    "type": "record",
-    "fields": [
-      {
-        "name": "MyFields",
-        "type": "string"
-      },
-      {
-        "name": "MyType",
-        "type": {
-          "namespace": "com.kafka",
-          "name": "MyRecord",
-          "type": "record",
-          "fields": [
-            {
-              "name": "key_field1",
-              "type": "string"
-            },
-            {
-              "name": "timestamp_field1",
-              "type": "string"
-            },
-            {
-              "name": "string_field1",
-              "type": "string"
-            },
-            {
-              "name": "double_field1",
-              "type": "string"
-            }
-          ]
-        }
-      }
-    ]
-  }
+ "namespace": "com.kafka",
+ "type": "record",
+ "name": "Dataset",
+ "fields": [
+     {"name": "key", "type": "string"},
+     {"name": "timestamp", "type": "long"},
+     {"name": "message", "type": "string"},
+     {"name": "Number", "type": "double"}
+ ]
 }
