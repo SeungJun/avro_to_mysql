@@ -95,7 +95,7 @@
                             <goal>schema</goal>
                         </goals>
                         <configuration>
-                            <sourceDirectory>${project.basedir}/src/main/resources/avro.io/</sourceDirectory>
+                            <sourceDirectory>${project.basedir}/src/main/resources/avro/io/</sourceDirectory>
                             <includes>
                                 <include>Schema.avsc</include>
                             </includes>
@@ -113,7 +113,7 @@
                     <schemaRegistryUrls>
                         <param>${schemaRegistryUrl}</param>
                     </schemaRegistryUrls>
-                    <userInfoConfig>${schemaRegistryBasicAuthUserInfo}</userInfoConfig>
+<!--                    <userInfoConfig>${schemaRegistryBasicAuthUserInfo}</userInfoConfig>-->
                     <subjects>
                         <transactions-value>src/main/resources/avro/io/Schema.avsc</transactions-value>
                     </subjects>

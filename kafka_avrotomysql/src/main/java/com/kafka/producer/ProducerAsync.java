@@ -1,5 +1,6 @@
 package com.kafka.producer;
 
+import com.kafka.MyTest;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
@@ -19,7 +20,7 @@ public class ProducerAsync {
         Producer<String, String> producer = new KafkaProducer<>(props); //Properties 오브젝트를 전달해 새 프로듀서를 생성합니다.
 
 //        Field_Type fieldType = new Field_Type();
-
+        MyTest test = new MyTest() ;
 
         try {
             for (int i = 0; i < 3; i++) {

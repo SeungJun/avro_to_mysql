@@ -3,6 +3,7 @@
   "type": "array",
   "namespace": "com.kafka",
   "items": {
+    "namespace": "com.kafka",
     "name": "MyTest",
     "type": "record",
     "fields": [
@@ -13,7 +14,8 @@
       {
         "name": "Schema",
         "type": {
-          "name": "FieldType",
+          "namespace": "com.kafka",
+          "name": "SchemaType",
           "type": "record",
           "fields": [
             {
