@@ -171,6 +171,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.1</version>
                 <executions>
                     <execution>
                         <id>validate</id>
@@ -190,7 +191,7 @@
                             <includeResources>false</includeResources>
                             <includeTestResources>false</includeTestResources>
                             <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                            <excludes>io/confluent/examples/clients/cloud/**</excludes>
+<!--                            <excludes>com/kaf</excludes>-->
                             <configLocation>checkstyle.xml</configLocation>
                         </configuration>
                         <goals>
