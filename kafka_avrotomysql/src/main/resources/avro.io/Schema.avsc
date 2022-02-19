@@ -1,19 +1,19 @@
 {
-  "name": "MyClass",
+  "name": "TestSchema",
   "type": "array",
-  "namespace": "com.acme.avro",
+  "namespace": "com.kafka",
   "items": {
-    "name": "MyClass_record",
+    "name": "MyTest",
     "type": "record",
     "fields": [
       {
-        "name": "name",
+        "name": "FieldsSchema",
         "type": "string"
       },
       {
-        "name": "fields",
+        "name": "Schema",
         "type": {
-          "name": "fields",
+          "name": "FieldType",
           "type": "record",
           "fields": [
             {
