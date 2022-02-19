@@ -1,6 +1,8 @@
 package com.kafka.producer;
 
+import com.kafka.MyRecord;
 import com.kafka.MyTest;
+import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
@@ -11,21 +13,32 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import java.util.Properties;
 
 public class ProducerAsync {
+
+    private static final String TOPIC = "testTopic";
+
     public static void main(String[] args) {
-        Properties props = new Properties(); //Properties 오브젝트를 시작합니다.
+        Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092"); //브로커 리스트를 정의합니다.
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class); //메시지 키와 벨류에 문자열을 지정하므로 내장된 StringSerializer를 지정합니다.
+        props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
+        props.put(ProducerConfig.ACKS_CONFIG, "all");
+        props.put(ProducerConfig.RETRIES_CONFIG, 0);
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
 
-        Producer<String, String> producer = new KafkaProducer<>(props); //Properties 오브젝트를 전달해 새 프로듀서를 생성합니다.
-
-//        Field_Type fieldType = new Field_Type();
-        MyTest test = new MyTest() ;
-
+        Producer<String, MyRecord> producer = new KafkaProducer<>(props);
         try {
-            for (int i = 0; i < 3; i++) {
-                ProducerRecord<String, String> record = new ProducerRecord<>("testTopic", "test - " + i); //ProducerRecord 오브젝트를 생성합니다.
+
+            for (int i = 0; i < 4; i++) {
+//                ProducerRecord<String, String> record = new ProducerRecord<>("testTopic", "test - " + i);
+                final String orderId = "id" + Long.toString(i);
+//                MyTest myTest = new MyTest(orderId, MyRecord.newBuilder().build()) ;
+                MyRecord myRecord = new MyRecord(orderId, orderId, orderId, orderId);
+                MyTest myTest = new MyTest(orderId, new MyRecord()) ;
+                ProducerRecord<String, MyRecord> record = new ProducerRecord<>(TOPIC, orderId ,myRecord);
+                //ProducerRecord 오브젝트를 생성합니다.
                 producer.send(record, new ProducerCallback(record)); //프로듀서에서 레코드를 보낼 때 콜백 오브젝트를 같이 보냅니다.
+
+                System.out.printf("Successfully produced 10 messages to a topic called %s%n", TOPIC);
             }
         } catch (Exception e){
             e.printStackTrace();

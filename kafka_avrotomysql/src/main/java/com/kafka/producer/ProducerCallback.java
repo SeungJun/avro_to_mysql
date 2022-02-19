@@ -1,13 +1,15 @@
 package com.kafka.producer;
 
+import com.kafka.MyRecord;
+import com.kafka.MyTest;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 
 public class ProducerCallback implements Callback { //콜백을 사용하기 위해 org.apache.kafka.clients.producer.Callback를 구현하는 클래스가 필요합니다.
-    private ProducerRecord<String, String> record;
+    private ProducerRecord<String, MyRecord> record;
 
-    public ProducerCallback(ProducerRecord<String, String> record) {
+    public ProducerCallback(ProducerRecord<String, MyRecord> record) {
         this.record = record;
     }
 

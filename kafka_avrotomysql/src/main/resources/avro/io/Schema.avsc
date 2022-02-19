@@ -8,14 +8,14 @@
     "type": "record",
     "fields": [
       {
-        "name": "FieldsSchema",
+        "name": "MyFields",
         "type": "string"
       },
       {
-        "name": "Schema",
+        "name": "MyType",
         "type": {
           "namespace": "com.kafka",
-          "name": "SchemaType",
+          "name": "MyRecord",
           "type": "record",
           "fields": [
             {
