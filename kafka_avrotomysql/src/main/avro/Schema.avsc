@@ -1,0 +1,40 @@
+{
+  "name": "MyClass",
+  "type": "array",
+  "namespace": "com.acme.avro",
+  "items": {
+    "name": "MyClass_record",
+    "type": "record",
+    "fields": [
+      {
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "name": "fields",
+        "type": {
+          "name": "fields",
+          "type": "record",
+          "fields": [
+            {
+              "name": "key_field1",
+              "type": "string"
+            },
+            {
+              "name": "timestamp_field1",
+              "type": "string"
+            },
+            {
+              "name": "string_field1",
+              "type": "string"
+            },
+            {
+              "name": "double_field1",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
