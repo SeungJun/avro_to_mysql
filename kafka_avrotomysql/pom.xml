@@ -20,13 +20,13 @@
         <schema-registry.version>7.0.1</schema-registry.version>
     </properties>
 
-    <licenses>
+<!--    <licenses>
         <license>
             <name>Apache License 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
             <distribution>repo</distribution>
         </license>
-    </licenses>
+    </licenses>-->
 
     <repositories>
         <repository>
@@ -66,6 +66,19 @@
             <artifactId>kafka-avro-serializer</artifactId>
             <version>${schema-registry.version}</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId></groupId>-->
+<!--            <artifactId>kafka-connect-</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId></groupId>-->
+<!--            <artifactId></artifactId>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.28</version>
+        </dependency>
     </dependencies>
 
 
@@ -100,7 +113,6 @@
                                 <include>Schema.avsc</include>
                             </includes>
                             <outputDirectory>${project.build.directory}/generated-sources</outputDirectory>
-<!--                            <outputDirectory>${project.basedir}/src/main/java/com/kafka</outputDirectory>-->
                         </configuration>
                     </execution>
                 </executions>
