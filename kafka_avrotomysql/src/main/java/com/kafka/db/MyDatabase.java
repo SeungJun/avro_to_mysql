@@ -2,7 +2,6 @@ package com.kafka.db;
 
 import com.kafka.Dataset;
 import com.mysql.cj.jdbc.MysqlDataSource;
-import org.apache.avro.generic.GenericData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,8 +9,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MyDatabase {
 
@@ -29,8 +30,8 @@ public class MyDatabase {
         MysqlDataSource ds = new MysqlDataSource();
         ds.setServerName("127.0.0.1");
         ds.setPort(3306);
-        ds.setUser("wonsj");
-        ds.setPassword("sjwood4111");
+        ds.setUser("test");
+        ds.setPassword("test");
         ds.setDatabaseName("MyData");
 
         try {
