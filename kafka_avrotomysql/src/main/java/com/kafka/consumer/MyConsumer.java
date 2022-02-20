@@ -33,6 +33,9 @@ public class MyConsumer {
     }
 
 
+    /**
+     * this method get db connection in this timing
+     */
     public void startConsuming() {
         executorService = Executors.newFixedThreadPool(numberPartitions);
         Properties properties = getConsumerProps();
@@ -52,8 +55,8 @@ public class MyConsumer {
         props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "test");
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
-        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "2000");
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
         props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);
@@ -61,7 +64,11 @@ public class MyConsumer {
         return props;
     }
 
-
+    /**
+     * this method do process db insert
+     * @param properties
+     * @return
+     */
     private Runnable getConsumerThread(Properties properties) {
         LinkedHashMap<String, Dataset> linkedMap = new LinkedHashMap<>();
         return () -> {
@@ -100,18 +107,27 @@ public class MyConsumer {
         };
     }
 
+    /**
+     * await 1seconds
+     * @throws InterruptedException
+     */
     public void stopConsuming() throws InterruptedException {
         doneConsuming = true;
-        executorService.awaitTermination(10000, TimeUnit.MILLISECONDS);
+        executorService.awaitTermination(1, TimeUnit.SECONDS);
         executorService.shutdownNow();
     }
 
+    /**
+     * thread sleep time is 2 seconds
+     * @param args
+     * @throws InterruptedException
+     */
     public static void main(final String[] args) throws InterruptedException {
 
         MyConsumer myConsumerExample = new MyConsumer(2);
         myConsumerExample.startConsuming();
         // 30 seconds
-        Thread.sleep(30000);
+        Thread.sleep(2000);
         myConsumerExample.stopConsuming();
 
     }

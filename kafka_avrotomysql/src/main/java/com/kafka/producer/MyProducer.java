@@ -36,7 +36,7 @@ public class MyProducer {
         Long randomLong = ThreadLocalRandom.current().nextLong();
 
         try {
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 23; i++) {
                 final String orderId = "this is key id" + Long.toString(i);
                 Dataset dataset = new Dataset(orderId ,randomLong, sdf.format(timestamp), randomDouble);
 //                Dataset dataset = new Dataset(orderId , 1L, sdf.format(timestamp), 100.00d );

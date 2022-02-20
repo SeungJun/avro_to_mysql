@@ -2,6 +2,7 @@ package com.kafka.db;
 
 import com.kafka.Dataset;
 import com.mysql.cj.jdbc.MysqlDataSource;
+import org.apache.avro.generic.GenericData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,8 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MyDatabase {
@@ -21,6 +21,9 @@ public class MyDatabase {
     private static String insertStatement = "insert into MyTest(consumer_key, message, TimeDate, NumberIdentity) values(?,?,?,?); ";
 
 
+    /**
+     * get db connection
+     */
     public static void initConnection(){
 
         MysqlDataSource ds = new MysqlDataSource();
@@ -41,9 +44,25 @@ public class MyDatabase {
 
     }
 
+    /**
+     * this method do Databse insert to table
+     * @param linkedMap
+     */
     public static void getDataFromConsumer(LinkedHashMap<String,Dataset> linkedMap){
 
-        List<Dataset> transaction = linkedMap.entrySet()
+        //순서 보장
+        List<Dataset> transaction = new ArrayList<>();
+        for(Map.Entry<String, Dataset> map : linkedMap.entrySet()){
+
+            transaction.add(Dataset.newBuilder()
+                    .setKey(map.getKey())
+                    .setMessage(map.getValue().getMessage())
+                    .setNumber(map.getValue().getNumber())
+                    .setTimestamp(map.getValue().getTimestamp())
+                    .build());
+        }
+
+/*        List<Dataset> transaction = linkedMap.entrySet()
                 .parallelStream()
                 .map((map) ->
                         Dataset.newBuilder()
@@ -53,7 +72,7 @@ public class MyDatabase {
                                 .setTimestamp(map.getValue().getTimestamp())
                                 .build()
 
-                ).collect(Collectors.toList());
+                ).collect(Collectors.toList());*/
 
         MyDatabase.insertData(transaction);
         if (connection != null) {
@@ -66,6 +85,10 @@ public class MyDatabase {
 
     }
 
+    /**
+     * synchronized insert
+     * @param data
+     */
     private static synchronized void insertData(List<Dataset> data) {
 
         PreparedStatement statement = null;
