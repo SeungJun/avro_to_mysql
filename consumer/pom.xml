@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.kafka</groupId>
+        <artifactId>message_queue_avro</artifactId>
+        <version>${project.version}</version>
+    </parent>
+
+    <artifactId>consumer</artifactId>
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.version>1.0.0-SNAPSHOT</project.version>
+        <java.version>8</java.version>
+        <slf4j-api.version>1.7.6</slf4j-api.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <avro.version>1.10.1</avro.version>
+        <schemaRegistryUrl>http://localhost:8081</schemaRegistryUrl>
+        <schemaRegistryBasicAuthUserInfo></schemaRegistryBasicAuthUserInfo>
+        <schemaLocal>src/main/resource/avro/io/Schema.avsc</schemaLocal>
+        <schema-registry.version>7.0.1</schema-registry.version>
+    </properties>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.28</version>
+        </dependency>
+        <dependency>
+            <groupId>com.kafka</groupId>
+            <artifactId>module-core</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>

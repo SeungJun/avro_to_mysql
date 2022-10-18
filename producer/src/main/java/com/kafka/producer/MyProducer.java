@@ -16,6 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static com.kafka.common.Constant.TOPIC;
 
+
 public class MyProducer {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

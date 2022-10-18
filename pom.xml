@@ -4,10 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <artifactId>kafka_avrotomysql</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <groupId>com.kafka</groupId>
+    <artifactId>message_queue_avro</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
     <properties>
         <java.version>8</java.version>
@@ -20,29 +20,19 @@
         <schema-registry.version>7.0.1</schema-registry.version>
     </properties>
 
-<!--    <licenses>
+    <modules>
+        <module>producer</module>
+        <module>consumer</module>
+        <module>module-core</module>
+    </modules>
+
+    <licenses>
         <license>
             <name>Apache License 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
             <distribution>repo</distribution>
         </license>
-    </licenses>-->
-
-    <repositories>
-        <repository>
-            <id>confluent</id>
-            <name>Confluent</name>
-            <url>https://packages.confluent.io/maven/</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>confluent</id>
-            <url>https://packages.confluent.io/maven/</url>
-        </pluginRepository>
-    </pluginRepositories>
-
+    </licenses>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
@@ -66,19 +56,12 @@
             <artifactId>kafka-avro-serializer</artifactId>
             <version>${schema-registry.version}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId></groupId>-->
-<!--            <artifactId>kafka-connect-</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId></groupId>-->
-<!--            <artifactId></artifactId>-->
-<!--        </dependency>-->
-        <dependency>
+
+<!--        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.28</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
 
@@ -125,7 +108,7 @@
                     <schemaRegistryUrls>
                         <param>${schemaRegistryUrl}</param>
                     </schemaRegistryUrls>
-<!--                    <userInfoConfig>${schemaRegistryBasicAuthUserInfo}</userInfoConfig>-->
+                    <!--                    <userInfoConfig>${schemaRegistryBasicAuthUserInfo}</userInfoConfig>-->
                     <subjects>
                         <transactions-value>src/main/resources/avro/io/Schema.avsc</transactions-value>
                     </subjects>
@@ -135,15 +118,17 @@
                 </goals>
             </plugin>
 
-<!--            <plugin>
+
+            <!--    unavailable        -->
+            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <descriptors>
                         <descriptor>src/assembly/package.xml</descriptor>
                     </descriptors>
                 </configuration>
-            </plugin>-->
-<!--            <plugin>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>3.1.1</version>
@@ -175,9 +160,24 @@
 
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
+
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>confluent</id>
+            <name>Confluent</name>
+            <url>https://packages.confluent.io/maven/</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>

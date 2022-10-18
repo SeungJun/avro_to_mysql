@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.kafka.common.Constant.TOPIC;
 
+
 public class MyConsumer {
 
     private volatile boolean doneConsuming = false;

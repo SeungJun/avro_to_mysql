@@ -1,0 +1,11 @@
+{
+ "namespace": "com.kafka",
+ "type": "record",
+ "name": "Dataset",
+ "fields": [
+     {"name": "key", "type": "string"},
+     {"name": "timestamp", "type": "long"},
+     {"name": "message", "type": "string"},
+     {"name": "Number", "type": "double"}
+ ]
+}
