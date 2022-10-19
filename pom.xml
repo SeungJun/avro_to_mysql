@@ -13,10 +13,10 @@
         <java.version>8</java.version>
         <slf4j-api.version>1.7.6</slf4j-api.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <avro.version>1.10.1</avro.version>
+        <avro.version>1.11.0</avro.version>
         <schemaRegistryUrl>http://localhost:8081</schemaRegistryUrl>
         <schemaRegistryBasicAuthUserInfo></schemaRegistryBasicAuthUserInfo>
-        <schemaLocal>src/main/resource/avro/io/Schema.avsc</schemaLocal>
+        <schemaLocal>src/main/java/resource/avro/io/Schema.avsc</schemaLocal>
         <schema-registry.version>7.0.1</schema-registry.version>
     </properties>
 
@@ -26,42 +26,17 @@
         <module>module-core</module>
     </modules>
 
-    <licenses>
+<!--    <licenses>
         <license>
             <name>Apache License 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
             <distribution>repo</distribution>
         </license>
-    </licenses>
+    </licenses>-->
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
-        <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka-clients</artifactId>
-            <version>2.7.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.30</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.avro</groupId>
-            <artifactId>avro</artifactId>
-            <version>1.11.0</version>
-        </dependency>
-        <dependency>
-            <groupId>io.confluent</groupId>
-            <artifactId>kafka-avro-serializer</artifactId>
-            <version>${schema-registry.version}</version>
-        </dependency>
 
-<!--        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.28</version>
-        </dependency>-->
     </dependencies>
 
 
@@ -80,26 +55,41 @@
                 </configuration>
             </plugin>
 
-            <plugin>
+<!--            <plugin>
                 <groupId>org.apache.avro</groupId>
                 <artifactId>avro-maven-plugin</artifactId>
                 <version>${avro.version}</version>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
+                        &lt;!&ndash;                        <phase>none</phase>&ndash;&gt;
                         <goals>
                             <goal>schema</goal>
                         </goals>
                         <configuration>
-                            <sourceDirectory>${project.basedir}/src/main/resources/avro/io/</sourceDirectory>
+                            <sourceDirectory>${project.basedir}/src/main/avro/</sourceDirectory>
                             <includes>
-                                <include>Schema.avsc</include>
+                                <include>*.avsc</include>
                             </includes>
-                            <outputDirectory>${project.build.directory}/generated-sources</outputDirectory>
+&lt;!&ndash;                            <outputDirectory>${project.build.directory}/generated-sources</outputDirectory>&ndash;&gt;
+                            <outputDirectory>${project.basedir}/src/main/java/com/kafka/message/</outputDirectory>
+                            <testSourceDirectory>${project.basedir}/src/test/java/</testSourceDirectory>
+                            <testOutputDirectory>${project.basedir}/src/test/java/</testOutputDirectory>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+                <configuration>
+                    <sourceDirectory>${project.basedir}/src/main/avro/</sourceDirectory>
+                    <includes>
+                        <include>*.avsc</include>
+                    </includes>
+                    &lt;!&ndash;                    <outputDirectory>${project.build.directory}/generated-sources</outputDirectory>&ndash;&gt;
+                    <outputDirectory>${project.basedir}/src/main/java/com/kafka/message/</outputDirectory>
+
+                    <testSourceDirectory>${project.basedir}/src/test/java/</testSourceDirectory>
+                    <testOutputDirectory>${project.basedir}/src/test/java/</testOutputDirectory>
+                </configuration>
+            </plugin>-->
             <plugin>
                 <groupId>io.confluent</groupId>
                 <artifactId>kafka-schema-registry-maven-plugin</artifactId>
@@ -110,7 +100,7 @@
                     </schemaRegistryUrls>
                     <!--                    <userInfoConfig>${schemaRegistryBasicAuthUserInfo}</userInfoConfig>-->
                     <subjects>
-                        <transactions-value>src/main/resources/avro/io/Schema.avsc</transactions-value>
+                        <transactions-value>src/main/java/resources/avro/io/Schema.avsc</transactions-value>
                     </subjects>
                 </configuration>
                 <goals>
@@ -120,47 +110,47 @@
 
 
             <!--    unavailable        -->
-<!--            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/assembly/package.xml</descriptor>
-                    </descriptors>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.1</version>
-                <executions>
-                    <execution>
-                        <id>validate</id>
-                        <phase>none</phase>
-                        <configuration>
-                            <skip>true</skip>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>test-compile</id>
-                        <phase>test-compile</phase>
-                        <configuration>
-                            <encoding>UTF-8</encoding>
-                            <consoleOutput>true</consoleOutput>
-                            <failsOnError>true</failsOnError>
-                            <failOnViolation>true</failOnViolation>
-                            <includeResources>false</includeResources>
-                            <includeTestResources>false</includeTestResources>
-                            <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                            <excludes>com/kafka/**</excludes>
-                        </configuration>
+            <!--            <plugin>
+                            <artifactId>maven-assembly-plugin</artifactId>
+                            <configuration>
+                                <descriptors>
+                                    <descriptor>src/assembly/package.xml</descriptor>
+                                </descriptors>
+                            </configuration>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-checkstyle-plugin</artifactId>
+                            <version>3.1.1</version>
+                            <executions>
+                                <execution>
+                                    <id>validate</id>
+                                    <phase>none</phase>
+                                    <configuration>
+                                        <skip>true</skip>
+                                    </configuration>
+                                </execution>
+                                <execution>
+                                    <id>test-compile</id>
+                                    <phase>test-compile</phase>
+                                    <configuration>
+                                        <encoding>UTF-8</encoding>
+                                        <consoleOutput>true</consoleOutput>
+                                        <failsOnError>true</failsOnError>
+                                        <failOnViolation>true</failOnViolation>
+                                        <includeResources>false</includeResources>
+                                        <includeTestResources>false</includeTestResources>
+                                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                                        <excludes>com/kafka/**</excludes>
+                                    </configuration>
 
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
+                                    <goals>
+                                        <goal>check</goal>
+                                    </goals>
 
-                    </execution>
-                </executions>
-            </plugin>-->
+                                </execution>
+                            </executions>
+                        </plugin>-->
 
         </plugins>
     </build>

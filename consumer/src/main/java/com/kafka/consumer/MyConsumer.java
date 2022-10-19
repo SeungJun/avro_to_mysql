@@ -1,6 +1,5 @@
 package com.kafka.consumer;
 
-import com.kafka.Dataset;
 import com.kafka.db.MyDatabase;
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
@@ -71,20 +70,20 @@ public class MyConsumer {
      * @return
      */
     private Runnable getConsumerThread(Properties properties) {
-        LinkedHashMap<String, Dataset> linkedMap = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> linkedMap = new LinkedHashMap<>();
         return () -> {
-            org.apache.kafka.clients.consumer.Consumer<String, Dataset> consumer = null;
+            org.apache.kafka.clients.consumer.Consumer<String, Object> consumer = null;
 
             try {
                 consumer = new KafkaConsumer<>(properties);
                 consumer.subscribe(Collections.singletonList(TOPIC));
                 while (!doneConsuming) {
-                    final ConsumerRecords<String, Dataset> records = consumer.poll(Duration.ofMillis(1000));
+                    final ConsumerRecords<String, Object> records = consumer.poll(Duration.ofMillis(1000));
 
-                    for (final ConsumerRecord<String, Dataset> record : records) {
+                    for (final ConsumerRecord<String, Object> record : records) {
 
                         final String key = record.key();
-                        final Dataset value = record.value();
+                        final Object value = record.value();
                         System.out.printf("---> Topic: %s, consumed Partition: %s, Offset: %d, Key: %s, Value: %s\n",
                                 record.topic(), record.partition(), record.offset(), key, value);
 

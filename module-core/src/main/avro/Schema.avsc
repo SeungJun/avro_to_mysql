@@ -1,5 +1,5 @@
 {
- "namespace": "com.kafka.message",
+ "namespace": "com.kafka.core.avro",
  "type": "record",
  "name": "Dataset",
  "fields": [

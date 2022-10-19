@@ -1,5 +1,5 @@
 {
- "namespace": "com.kafka",
+ "namespace": "com.kafka.message",
  "type": "record",
  "name": "Dataset",
  "fields": [

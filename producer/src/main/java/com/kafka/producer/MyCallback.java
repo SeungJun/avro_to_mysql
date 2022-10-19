@@ -1,14 +1,13 @@
 package com.kafka.producer;
 
-import com.kafka.Dataset;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 
 public class MyCallback implements Callback {
-    private ProducerRecord<String, Dataset> record;
+    private ProducerRecord<String, Object> record;
 
-    public MyCallback(ProducerRecord<String, Dataset> record) {
+    public MyCallback(ProducerRecord<String, Object> record) {
         this.record = record;
     }
 

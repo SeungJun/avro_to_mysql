@@ -1,6 +1,5 @@
 package com.kafka.producer;
 
-import com.kafka.Dataset;
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -30,7 +29,7 @@ public class MyProducer {
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
 
-        Producer<String, Dataset> producer = new KafkaProducer<>(props);
+        Producer<String, Object> producer = new KafkaProducer<>(props);
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         Double randomDouble = ThreadLocalRandom.current().nextDouble();
@@ -39,9 +38,9 @@ public class MyProducer {
         try {
             for (int i = 0; i < 23; i++) {
                 final String orderId = "this is key id" + Long.toString(i);
-                Dataset dataset = new Dataset(orderId ,randomLong, sdf.format(timestamp), randomDouble);
+//                Object dataset = new Object(orderId ,randomLong, sdf.format(timestamp), randomDouble);
 //                Dataset dataset = new Dataset(orderId , 1L, sdf.format(timestamp), 100.00d );
-                ProducerRecord<String, Dataset> record = new ProducerRecord<>(TOPIC, orderId , dataset);
+                ProducerRecord<String, Object> record = new ProducerRecord<>(TOPIC, orderId , new Object());
                 producer.send(record, new MyCallback(record));
 
                 System.out.printf("-> Topic: %s, Partition: %s, Key: %s, Value: %s\n",
