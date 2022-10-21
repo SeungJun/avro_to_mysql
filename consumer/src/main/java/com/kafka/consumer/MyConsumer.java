@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static com.kafka.common.Constant.TOPIC;
+import static com.kafka.core.common.KafkaConstant.TOPIC;
 
 
 public class MyConsumer {

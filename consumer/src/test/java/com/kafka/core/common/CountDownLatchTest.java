@@ -1,4 +1,4 @@
-package com.kafka.common;
+package com.kafka.core.common;
 
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
