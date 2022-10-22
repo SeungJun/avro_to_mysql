@@ -5,16 +5,13 @@ import com.kafka.producer.manager.PublishClientManager;
 import com.kafka.producer.manager.impl.DefaultPublishFactoryImpl;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.concurrent.ThreadLocalRandom;
 
 
 
 public class PublishApp {
 
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final String brokerList = "http://127.0.0.1:9092";
-
 
     public static void main(String[] args) {
 

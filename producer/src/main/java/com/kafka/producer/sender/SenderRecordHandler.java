@@ -1,8 +1,6 @@
 package com.kafka.producer.sender;
 
-import com.kafka.message.avro.Dataset;
 import com.kafka.producer.manager.PublishClientFactory;
-import org.apache.kafka.clients.producer.Producer;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -33,8 +31,6 @@ public class SenderRecordHandler<T> implements Runnable{
 		String threadName = Thread.currentThread().getName();
 		counter.incrementAndGet();
 
-
-		Producer<String, Dataset> producer = publishFactory.createProducer();
 		publishFactory.sendEvent(KAFKA_TOPIC, String.valueOf(publishId), dataset );
 //		publishFactory.sendEvent(KAFKA_TOPIC, publishId, dataset );
 
