@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static com.kafka.core.common.KafkaConstant.TOPIC;
+import static com.kafka.core.common.KafkaConstant.KAFKA_TOPIC;
 
 
 public class MyConsumer {
@@ -76,7 +76,7 @@ public class MyConsumer {
 
             try {
                 consumer = new KafkaConsumer<>(properties);
-                consumer.subscribe(Collections.singletonList(TOPIC));
+                consumer.subscribe(Collections.singletonList(KAFKA_TOPIC));
                 while (!doneConsuming) {
                     final ConsumerRecords<String, Object> records = consumer.poll(Duration.ofMillis(1000));
 

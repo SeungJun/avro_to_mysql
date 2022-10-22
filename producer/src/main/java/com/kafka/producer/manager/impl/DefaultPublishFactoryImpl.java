@@ -9,7 +9,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 
 public class DefaultPublishFactoryImpl<T> implements PublishClientFactory<T> {
 
-	private String brokerList ;
+	private final String brokerList ;
 
 	public DefaultPublishFactoryImpl(String brokers){
 		this.brokerList = brokers;
@@ -20,7 +20,6 @@ public class DefaultPublishFactoryImpl<T> implements PublishClientFactory<T> {
 	{
 		ProducerRecord<String, T> record = new ProducerRecord<>(topic, publishKey , event);
 		createProducer().send(record, new SenderCallback(record));
-
 	}
 
 	@Override

@@ -6,6 +6,6 @@
      {"name": "key", "type": "string"},
      {"name": "timestamp", "type": "long"},
      {"name": "message", "type": "string"},
-     {"name": "Number", "type": "double"}
+     {"name": "number", "type": "double"}
  ]
 }
