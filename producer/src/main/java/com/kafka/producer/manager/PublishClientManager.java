@@ -18,39 +18,39 @@ public class PublishClientManager implements AutoCloseable {
 
 	private final ScheduledExecutorService executorService;
 	private final String brokerList;
+	private final String schemaRegistry;
 	private Producer<String, Dataset> producer ;
-	private static final long iterationCount = Long.MAX_VALUE;
-	private static final int workerThreadCount = 10;
-	private static final int threadCount = 10;
+//	private static final long iterationCount = Long.MAX_VALUE;
+	private static final int threadPoolSize = 100;
 
-	public PublishClientManager(PublishClientFactory publishFactory, String brokerList)
+	public PublishClientManager(PublishClientFactory publishFactory, String brokerList, String schemaRegistry)
 	{
-		this.executorService = Executors.newScheduledThreadPool(threadCount);
+		this.executorService = Executors.newScheduledThreadPool(threadPoolSize);
 		this.brokerList = brokerList;
 		this.producer = publishFactory.createProducer();
+		this.schemaRegistry = schemaRegistry;
 	}
 
 
 	public void publish(){
 
-		PublishClientFactory publishFactory = new DefaultPublishFactoryImpl(brokerList);
-
-//		Dataset dataset = new Dataset(orderId , 1L, LocalDateTime.now()., 100.00d );
-//		Dataset example = new Dataset(String.valueOf(startId) , Instant.now().getEpochSecond(), RandomGenerator.generateRandomString() ,RandomGenerator.generateRangedNumber()) ,latch);
+		PublishClientFactory publishFactory = new DefaultPublishFactoryImpl(brokerList, schemaRegistry);
 
 		Producer<String, Dataset> producer = publishFactory.createProducer();
 
-		Stream.iterate(0, i-> i< iterationCount , i-> i+1)
-				.map(v-> v%5000)
+		Stream.iterate(0, i-> i< 1000 , i-> i+1)
+//				.map(v-> v%500)
 				.forEach(thread -> {
 
-					CountDownLatch latch = new CountDownLatch(workerThreadCount);
+					System.out.println(String.format("-> thread : %s", thread));
+					CountDownLatch latch = new CountDownLatch(threadPoolSize);
 
-					LongStream.iterate(1, j-> j< workerThreadCount, j-> j+5000)
+					LongStream.iterate(1, j-> j< threadPoolSize, j-> j+1)
 							.boxed()
 							.map(startId -> new SenderRecordHandler(startId,publishFactory
 									,  new Dataset(String.valueOf(startId) , Instant.now().getEpochSecond(), RandomGenerator.generateRandomString() ,RandomGenerator.generateRangedNumber()) ,latch))
-							.forEach(handler -> executorService.scheduleAtFixedRate(handler, 0 , 100, TimeUnit.MILLISECONDS));
+
+							.forEach(handler -> executorService.scheduleAtFixedRate(handler, 0 , 1, TimeUnit.MILLISECONDS));
 
 
 					try {

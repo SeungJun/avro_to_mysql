@@ -10,9 +10,11 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 public class DefaultPublishFactoryImpl<T> implements PublishClientFactory<T> {
 
 	private final String brokerList ;
+	private final String schemeRegistry;
 
-	public DefaultPublishFactoryImpl(String brokers){
+	public DefaultPublishFactoryImpl(String brokers, String schemeRegistry){
 		this.brokerList = brokers;
+		this.schemeRegistry = schemeRegistry;
 	}
 
 	@Override
@@ -25,6 +27,6 @@ public class DefaultPublishFactoryImpl<T> implements PublishClientFactory<T> {
 	@Override
 	public Producer<String, T> createProducer() {
 
-		return new KafkaProducer<>(PublishConfig.defaultProducerConfig(brokerList));
+		return new KafkaProducer<>(PublishConfig.defaultProducerConfig(brokerList, schemeRegistry));
 	}
 }

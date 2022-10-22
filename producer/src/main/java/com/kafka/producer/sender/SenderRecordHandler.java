@@ -31,14 +31,9 @@ public class SenderRecordHandler<T> implements Runnable{
 		String threadName = Thread.currentThread().getName();
 		counter.incrementAndGet();
 
+		System.out.println(String.format("====> publish count : %s" ,threadName));
+
 		publishFactory.sendEvent(KAFKA_TOPIC, String.valueOf(publishId), dataset );
-//		publishFactory.sendEvent(KAFKA_TOPIC, publishId, dataset );
-
-
-//		ProducerRecord<String, Object> record = new ProducerRecord<>(TOPIC, orderId , new Object());
-//		producer.send(record, new PublishCallback(record));
-
 		latch.countDown();
-
 	}
 }

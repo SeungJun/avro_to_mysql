@@ -6,35 +6,10 @@ import java.util.concurrent.CountDownLatch;
 public class CountDownLatchTest {
 
 
-	private final static int THREADS = 10;
+	private final static int THREADS = 100;
 	private static CountDownLatch latch = new CountDownLatch(THREADS);
 
-	public static class RandomSleepRunnable implements Runnable {
-		private int id = 0;
 
-		private static Random random = new Random(System.currentTimeMillis());
-
-		public RandomSleepRunnable(int id) {
-			this.id = id;
-
-		}
-
-		@Override
-		public void run() {
-			System.out.println(Thread.currentThread().getName() + " : Thread(" + id + ") : Start.");
-			// 1000ms 에서 2000ms 사이의 딜레이 값을 랜덤하게 생성.
-			int delay = random.nextInt(1001) + 3000;
-			try {
-				System.out.println("Thread(" + id + ") : Sleep " + delay + "ms");
-				Thread.sleep(delay);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			System.out.println("Thread(" + id + ") : End.");
-			//latch 의 카운터에서 - 1.
-			latch.countDown();
-		}
-	}
 
 	public static void main(String[] args) {
 
@@ -56,4 +31,38 @@ public class CountDownLatchTest {
 		System.out.println("All threads are terminated");
 
 	}
+
+
+
+	public static class RandomSleepRunnable implements Runnable {
+
+		private int id = 0;
+		private static Random random = new Random(System.currentTimeMillis());
+
+		public RandomSleepRunnable(int id) {
+			this.id = id;
+		}
+
+		@Override
+		public void run() {
+
+			System.out.println(Thread.currentThread().getName() + " : Thread(" + id + ") : Start.");
+			// 1000ms 에서 2000ms 사이의 딜레이 값을 랜덤하게 생성.
+			int delay = random.nextInt(1001) + 3000;
+
+			try {
+
+				System.out.println("Thread(" + id + ") : Sleep " + delay + "ms");
+				Thread.sleep(delay);
+
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
+			System.out.println("Thread(" + id + ") : End.");
+			//latch 의 카운터에서 - 1.
+			latch.countDown();
+		}
+	}
+
 }
