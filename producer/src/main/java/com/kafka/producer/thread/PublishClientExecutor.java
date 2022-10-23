@@ -1,9 +1,10 @@
-package com.kafka.producer.manager;
+package com.kafka.producer.thread;
 
+import com.kafka.core.common.KafkaConstant;
 import com.kafka.core.util.RandomGenerator;
 import com.kafka.message.avro.Dataset;
+import com.kafka.producer.manager.PublishClientFactory;
 import com.kafka.producer.manager.impl.DefaultPublishFactoryImpl;
-import com.kafka.producer.sender.SenderRecordHandler;
 import org.apache.kafka.clients.producer.Producer;
 
 import java.time.Instant;
@@ -14,32 +15,30 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
-public class PublishClientManager implements AutoCloseable {
+public class PublishClientExecutor implements AutoCloseable {
 
-	private final ScheduledExecutorService executorService;
+	private final ScheduledExecutorService executor;
 	private final String brokerList;
 	private final String schemaRegistry;
 	private Producer<String, Dataset> producer ;
-//	private static final long iterationCount = Long.MAX_VALUE;
-	private static final int threadPoolSize = 100;
+	private static final int threadPoolSize = KafkaConstant.THREAD_POOL_SIZE;
 
-	public PublishClientManager(PublishClientFactory publishFactory, String brokerList, String schemaRegistry)
+	public PublishClientExecutor(PublishClientFactory publishFactory, String brokerList, String schemaRegistry)
 	{
-		this.executorService = Executors.newScheduledThreadPool(threadPoolSize);
+		this.executor = Executors.newScheduledThreadPool(threadPoolSize);
 		this.brokerList = brokerList;
 		this.producer = publishFactory.createProducer();
 		this.schemaRegistry = schemaRegistry;
 	}
 
 
-	public void publish(){
+	public void execute(){
 
 		PublishClientFactory publishFactory = new DefaultPublishFactoryImpl(brokerList, schemaRegistry);
 
-		Producer<String, Dataset> producer = publishFactory.createProducer();
+//		Producer<String, Dataset> producer = publishFactory.createProducer();
 
 		Stream.iterate(0, i-> i< 1000 , i-> i+1)
-//				.map(v-> v%500)
 				.forEach(thread -> {
 
 					System.out.println(String.format("-> thread : %s", thread));
@@ -50,16 +49,14 @@ public class PublishClientManager implements AutoCloseable {
 							.map(startId -> new SenderRecordHandler(startId,publishFactory
 									,  new Dataset(String.valueOf(startId) , Instant.now().getEpochSecond(), RandomGenerator.generateRandomString() ,RandomGenerator.generateRangedNumber()) ,latch))
 
-							.forEach(handler -> executorService.scheduleAtFixedRate(handler, 0 , 1, TimeUnit.MILLISECONDS));
-
+							.forEach(handler -> executor.scheduleAtFixedRate(handler, 0 , 1, TimeUnit.MILLISECONDS));
 
 					try {
 						latch.await();
 					} catch (InterruptedException e) {
-						System.out.println("finish threads with interrupt");
-						e.printStackTrace();
+						System.out.println("finish threads with interrupt :" + e);
+//						e.printStackTrace();
 					}
-
 				});
 	}
 
@@ -71,15 +68,15 @@ public class PublishClientManager implements AutoCloseable {
 			producer.close();
 		}
 
-		if (executorService != null) {
+		if (executor != null) {
 			System.out.println("close executor");
-			executorService.shutdown();
+			executor.shutdown();
 		}
 
 		try {
-			if (!executorService.awaitTermination(5000, TimeUnit.MILLISECONDS)) {
+			if (!executor.awaitTermination(5000, TimeUnit.MILLISECONDS)) {
 				System.out.println("Timed out waiting for consumer threads to shut down, exiting uncleanly");
-				executorService.shutdownNow();
+				executor.shutdownNow();
 			}
 		} catch (InterruptedException e) {
 			System.out.println("Interrupted during shutdown, exiting uncleanly");

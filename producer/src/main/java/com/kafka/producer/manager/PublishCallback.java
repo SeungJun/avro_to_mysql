@@ -1,13 +1,13 @@
-package com.kafka.producer.sender;
+package com.kafka.producer.manager;
 
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 
-public class SenderCallback<T> implements Callback {
+public class PublishCallback<T> implements Callback {
     private ProducerRecord<String, T> record;
 
-    public SenderCallback(ProducerRecord<String, T> record) {
+    public PublishCallback(ProducerRecord<String, T> record) {
         this.record = record;
     }
 

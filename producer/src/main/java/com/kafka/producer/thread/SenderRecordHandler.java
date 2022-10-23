@@ -1,4 +1,4 @@
-package com.kafka.producer.sender;
+package com.kafka.producer.thread;
 
 import com.kafka.producer.manager.PublishClientFactory;
 
@@ -31,7 +31,7 @@ public class SenderRecordHandler<T> implements Runnable{
 		String threadName = Thread.currentThread().getName();
 		counter.incrementAndGet();
 
-		System.out.println(String.format("====> publish count : %s" ,threadName));
+		System.out.println(String.format("=> publish count : %s" ,threadName));
 
 		publishFactory.sendEvent(KAFKA_TOPIC, String.valueOf(publishId), dataset );
 		latch.countDown();
