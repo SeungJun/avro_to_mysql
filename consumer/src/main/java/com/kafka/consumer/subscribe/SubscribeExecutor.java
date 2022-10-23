@@ -1,7 +1,8 @@
 package com.kafka.consumer.subscribe;
 
+import com.kafka.consumer.database.DatabaseFactory;
 import com.kafka.consumer.manager.SubscribeFactory;
-import com.kafka.db.MyDatabase;
+import com.kafka.core.common.KafkaConstant;
 import org.apache.kafka.clients.consumer.Consumer;
 
 import java.util.concurrent.ExecutorService;
@@ -10,51 +11,56 @@ import java.util.concurrent.TimeUnit;
 
 public class SubscribeExecutor implements AutoCloseable{
 
-	private volatile boolean doneConsuming = false;
-	private int partitionSize = 2;
+	private volatile boolean doneConsuming;
 	private ExecutorService executor;
-	private final String brokerList;
-	private final String schemeRegistry;
 	private final Consumer consumer;
-	private final String kafkaTopic;
+	private final DatabaseFactory dbfactory;
 
 
-	public SubscribeExecutor(SubscribeFactory subscribeFactory, String brokerList, String schemeRegistry, String topic){
-		this.brokerList =brokerList;
-		this.schemeRegistry = schemeRegistry;
+	public SubscribeExecutor(SubscribeFactory subscribeFactory, DatabaseFactory databaseFactory){
 		this.consumer = subscribeFactory.createConsumer();
-		this.kafkaTopic = topic;
+		this.dbfactory = databaseFactory;
+		this.doneConsuming = false;
+		this.executor = Executors.newFixedThreadPool(KafkaConstant.PARTITION_SIZE);
 	}
 
 
-	public void execute() throws InterruptedException {
-		MyDatabase.initConnection();
-		startConsuming(partitionSize, doneConsuming);
+	/**
+	 *
+	 * @throws InterruptedException
+	 */
+	public void execute() {
+		dbfactory.initConnection();
+//		MyDatabase.initConnection();
+		startConsuming(KafkaConstant.PARTITION_SIZE, doneConsuming);
 //		Thread.sleep(2000);
 		stopConsuming();
 	}
 
 
 	/**
-	 * this method get db connection in this timing
+	 * execute thread
+	 * @param partitionSize
+	 * @param doneConsuming
 	 */
 	public void startConsuming(int partitionSize, boolean doneConsuming) {
-		executor = Executors.newFixedThreadPool(partitionSize);
+
 		for (int i = 0; i < partitionSize; i++) {
-			executor.submit(new SubscribeHandler(consumer, kafkaTopic, doneConsuming));
+			executor.submit(new SubscribeHandler(consumer, doneConsuming, dbfactory));
 		}
 	}
 
 
 
 	/**
+	 * stop subscribe kafka topic
 	 * await 1seconds
 	 * @throws InterruptedException
 	 */
-	public void stopConsuming() throws InterruptedException {
+	public void stopConsuming(){
 		doneConsuming = true;
 		try {
-			if (!executor.awaitTermination(5000, TimeUnit.MILLISECONDS)) {
+			if (!executor.awaitTermination(3, TimeUnit.SECONDS)) {
 				System.out.println("Timed out waiting for consumer threads to shut down, exiting uncleanly");
 				executor.shutdownNow();
 			}

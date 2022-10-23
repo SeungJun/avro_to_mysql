@@ -16,14 +16,7 @@
 
 
     <properties>
-<!--        <java.version>8</java.version>-->
-<!--        <slf4j-api.version>1.7.6</slf4j-api.version>-->
-<!--        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
         <avro.version>1.10.1</avro.version>
-<!--        <schemaRegistryUrl>http://localhost:8081</schemaRegistryUrl>-->
-<!--        <schemaRegistryBasicAuthUserInfo></schemaRegistryBasicAuthUserInfo>-->
-<!--        <schemaLocal>src/main/java/resource/avro/io/Schema.avsc</schemaLocal>-->
-<!--        <schema-registry.version>7.0.1</schema-registry.version>-->
     </properties>
 
     <!--    <licenses>
@@ -36,7 +29,6 @@
 
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
@@ -69,7 +61,6 @@
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
-<!--                        <phase>none</phase>-->
                         <goals>
                             <goal>schema</goal>
                         </goals>
@@ -78,7 +69,6 @@
                             <includes>
                                 <include>*.avsc</include>
                             </includes>
-<!--                            <outputDirectory>${project.build.directory}/generated-sources</outputDirectory>-->
                             <outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
                         </configuration>
                     </execution>

@@ -1,12 +1,12 @@
 package com.kafka.consumer;
 
+import com.kafka.consumer.database.DatabaseFactory;
+import com.kafka.consumer.database.impl.DatabaseFactoryImpl;
 import com.kafka.consumer.manager.SubscribeFactory;
 import com.kafka.consumer.manager.impl.SubscribeFactoryImpl;
 import com.kafka.consumer.subscribe.SubscribeExecutor;
-import com.kafka.core.common.KafkaConstant;
 
-import static com.kafka.core.common.KafkaConstant.KAFKA_TOPIC;
-import static com.kafka.core.common.KafkaConstant.SCHEMA_REGISTRY_URL;
+import java.sql.Connection;
 
 
 public class SubscriberApplication {
@@ -18,9 +18,11 @@ public class SubscriberApplication {
      */
     public static void main(final String[] args) throws InterruptedException {
 
+        Connection connection = null;
+        SubscribeFactory subscribeFactory = new SubscribeFactoryImpl();
+        DatabaseFactory databaseFactory = new DatabaseFactoryImpl(connection);
 
-        SubscribeFactory subscribeFactory = new SubscribeFactoryImpl(KafkaConstant.KAFKA_BROKERS, KAFKA_TOPIC);
-        SubscribeExecutor subscribeExecutor = new SubscribeExecutor(subscribeFactory, KafkaConstant.KAFKA_BROKERS,SCHEMA_REGISTRY_URL,  KAFKA_TOPIC);
+        SubscribeExecutor subscribeExecutor = new SubscribeExecutor(subscribeFactory, databaseFactory);
         subscribeExecutor.execute();
 
     }

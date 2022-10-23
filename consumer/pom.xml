@@ -13,19 +13,6 @@
     <artifactId>consumer</artifactId>
     <packaging>jar</packaging>
 
-    <properties>
-        <project.version>1.0.0-SNAPSHOT</project.version>
-<!--        <java.version>8</java.version>-->
-<!--        <slf4j-api.version>1.7.6</slf4j-api.version>-->
-<!--        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
-<!--        <avro.version>1.10.1</avro.version>-->
-<!--        <schemaRegistryUrl>http://localhost:8081</schemaRegistryUrl>-->
-<!--        <schemaRegistryBasicAuthUserInfo></schemaRegistryBasicAuthUserInfo>-->
-<!--        <schemaLocal>src/main/resource/avro/io/Schema.avsc</schemaLocal>-->
-<!--        <schema-registry.version>7.0.1</schema-registry.version>-->
-    </properties>
-
-
     <dependencies>
         <dependency>
             <groupId>mysql</groupId>
@@ -35,15 +22,10 @@
         <dependency>
             <groupId>com.kafka</groupId>
             <artifactId>module-core</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
+
         </dependency>
 
-<!--        <dependency>
-            <groupId>io.confluent</groupId>
-            <artifactId>kafka-avro-serializer</artifactId>
-            <version>${schema-registry.version}</version>
-        </dependency>-->
+
 
     </dependencies>
 

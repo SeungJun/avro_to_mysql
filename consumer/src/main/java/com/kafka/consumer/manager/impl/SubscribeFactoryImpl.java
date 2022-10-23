@@ -7,19 +7,10 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 public class SubscribeFactoryImpl<T> implements SubscribeFactory {
 
-	private final String brokerList ;
-	private final String schemeRegistry;
-//	private final String kafkaTopic;
-
-	public SubscribeFactoryImpl(String brokers, String schemeRegistry){
-		this.brokerList = brokers;
-		this.schemeRegistry = schemeRegistry;
-//		this.kafkaTopic = topic;
-	}
 
 	@Override
 	public Consumer<String, T> createConsumer() {
-		return new KafkaConsumer<>(SubscribeConfig.consumerConfig(brokerList, schemeRegistry));
+		return new KafkaConsumer<>(SubscribeConfig.consumerConfig());
 
 	}
 

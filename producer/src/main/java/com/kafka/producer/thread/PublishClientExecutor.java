@@ -38,13 +38,15 @@ public class PublishClientExecutor implements AutoCloseable {
 
 //		Producer<String, Dataset> producer = publishFactory.createProducer();
 
-		Stream.iterate(0, i-> i< 1000 , i-> i+1)
+		Stream.iterate(0,  i-> i+1)
+				.limit(300)
 				.forEach(thread -> {
 
 					System.out.println(String.format("-> thread : %s", thread));
 					CountDownLatch latch = new CountDownLatch(threadPoolSize);
 
-					LongStream.iterate(1, j-> j< threadPoolSize, j-> j+1)
+					LongStream.iterate(1, j-> j+1)
+							.limit(100L)
 							.boxed()
 							.map(startId -> new SenderRecordHandler(startId,publishFactory
 									,  new Dataset(String.valueOf(startId) , Instant.now().getEpochSecond(), RandomGenerator.generateRandomString() ,RandomGenerator.generateRangedNumber()) ,latch))
@@ -55,7 +57,6 @@ public class PublishClientExecutor implements AutoCloseable {
 						latch.await();
 					} catch (InterruptedException e) {
 						System.out.println("finish threads with interrupt :" + e);
-//						e.printStackTrace();
 					}
 				});
 	}

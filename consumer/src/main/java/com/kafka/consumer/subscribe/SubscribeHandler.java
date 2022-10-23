@@ -1,7 +1,7 @@
 package com.kafka.consumer.subscribe;
 
+import com.kafka.consumer.database.DatabaseFactory;
 import com.kafka.consumer.model.AvroData;
-import com.kafka.db.MyDatabase;
 import com.kafka.message.avro.Dataset;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -17,16 +17,14 @@ import static com.kafka.core.common.KafkaConstant.KAFKA_TOPIC;
 public class SubscribeHandler implements Runnable{
 
 	private final Consumer consumer ;
-	private final String kafkaTopic;
 	private volatile boolean doneConsuming;
+	private DatabaseFactory dbFactory;
 
-	public SubscribeHandler(Consumer consumer,  String topic, boolean doneConsume){
+	public SubscribeHandler(Consumer consumer,  boolean doneConsume, DatabaseFactory databaseFactory){
 		this.consumer = consumer;
-		this.kafkaTopic = topic;
 		this.doneConsuming = doneConsume;
+		this.dbFactory = databaseFactory;
 	}
-
-
 
 	@Override
 	public void run() {
@@ -35,7 +33,7 @@ public class SubscribeHandler implements Runnable{
 
 		consumer.subscribe(Collections.singleton(KAFKA_TOPIC));
 
-		Map<String, Dataset> linkedMap = new LinkedHashMap<>();
+		Map<String, Dataset> avroDataMap = new LinkedHashMap<>();
 
 
 		while (!doneConsuming) {
@@ -45,18 +43,20 @@ public class SubscribeHandler implements Runnable{
 
 				final String key = record.key();
 				final Dataset value = record.value();
-				System.out.printf("---> Topic: %s, consumed Partition: %s, Offset: %d, Key: %s, Value: %s\n",
-						record.topic(), record.partition(), record.offset(), key, value);
 
-				linkedMap.put(key, value);
+				System.out.printf(String.format("---> Topic: %s, consumed Partition: %s, Offset: %d, Key: %s, Value: %s\n",
+						record.topic(), record.partition(), record.offset(), key, value));
+
+				avroDataMap.put(key, value);
 			}
 		}
 
-		data.setDatasetMap(linkedMap);
+		data.setDatasetMap(avroDataMap);
 
-		if(!linkedMap.isEmpty()){
+		if(!avroDataMap.isEmpty()){
 			//insert into db
-			MyDatabase.subscribeAvro(linkedMap);
+			dbFactory.subscribeAvro(avroDataMap);
+//			MyDatabase.subscribeAvro(linkedMap);
 		}
 	}
 }
