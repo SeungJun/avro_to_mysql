@@ -30,35 +30,30 @@ public class PublishClientExecutor implements AutoCloseable {
 		this.producer = publishFactory.createProducer();
 		this.schemaRegistry = schemaRegistry;
 	}
-
-
-	public void execute(){
-
+	
+	
+	public void execute() {
+		
 		PublishClientFactory publishFactory = new DefaultPublishFactoryImpl(brokerList, schemaRegistry);
-
-//		Producer<String, Dataset> producer = publishFactory.createProducer();
-
-		Stream.iterate(0,  i-> i+1)
-				.limit(300)
-				.forEach(thread -> {
-
-					System.out.println(String.format("-> thread : %s", thread));
-					CountDownLatch latch = new CountDownLatch(threadPoolSize);
-
-					LongStream.iterate(1, j-> j+1)
-							.limit(100L)
-							.boxed()
-							.map(startId -> new SenderRecordHandler(startId,publishFactory
-									,  new Dataset(String.valueOf(startId) , Instant.now().getEpochSecond(), RandomGenerator.generateRandomString() ,RandomGenerator.generateRangedNumber()) ,latch))
-
-							.forEach(handler -> executor.scheduleAtFixedRate(handler, 0 , 1, TimeUnit.MILLISECONDS));
-
-					try {
-						latch.await();
-					} catch (InterruptedException e) {
-						System.out.println("finish threads with interrupt :" + e);
-					}
-				});
+		
+		
+//		System.out.println(String.format("-> thread : %s", thread));
+		CountDownLatch latch = new CountDownLatch(threadPoolSize);
+		
+		LongStream.iterate(1, j -> j + 1)
+				.limit(100L)
+				.boxed()
+				.map(startId ->
+							  new SenderRecordHandler(startId, publishFactory
+						, new Dataset(String.valueOf(startId), Instant.now().getEpochSecond(), RandomGenerator.generateRandomString(), RandomGenerator.generateRangedNumber()), latch))
+				
+				.forEach(handler -> executor.scheduleAtFixedRate(handler, 0, 1, TimeUnit.MILLISECONDS));
+		
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			System.out.println("finish threads with interrupt :" + e);
+		}
 	}
 
 

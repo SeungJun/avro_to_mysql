@@ -35,8 +35,8 @@ public class DatabaseFactoryImpl<T> implements DatabaseFactory<T> {
 		MysqlDataSource ds = new MysqlDataSource();
 		ds.setServerName("127.0.0.1");
 		ds.setPort(3306);
-		ds.setUser("wonsj");
-		ds.setPassword("sjwood4111");
+		ds.setUser("user");
+		ds.setPassword("password");
 		ds.setDatabaseName("MyData");
 
 		try {
